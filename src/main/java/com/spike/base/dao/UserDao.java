@@ -24,5 +24,5 @@ public interface UserDao {
     int updateByPrimaryKey(User record);
 
     @Select("select * from user")
-    User selectAll();
+    List<User> selectAll();
 }

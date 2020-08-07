@@ -5,6 +5,8 @@ import com.spike.base.vo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @Description: --------------------------------------
  * @ClassName: UserService.java
@@ -20,7 +22,7 @@ public class UserService {
     @Autowired
     private UserDao userDao;
 
-    public User selectAll(){
+    public List<User> selectAll(){
         return userDao.selectAll();
     }
 }

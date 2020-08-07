@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * @Contact: lixj_zj@163.com
  **/
 @Component
-@ConfigurationProperties(prefix = "redis")
+@ConfigurationProperties(prefix = "spring.redis")   //从根目录开始搜索
 public class RedisConfig {
     private String host;
     private int port;

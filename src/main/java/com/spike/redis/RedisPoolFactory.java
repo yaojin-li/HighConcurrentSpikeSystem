@@ -2,52 +2,27 @@ package com.spike.redis;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
-import redis.clients.jedis.Jedis;
+import org.springframework.stereotype.Service;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 /**
- * @Description: --------------------------------------
- * @ClassName: RedisService.java
- * @Date: 2020/6/7 17:07
+ * @Description:
+ * redis 读取配置文件。与 RedisService 文件合到一起会出现循环依赖异常。
+ * JedisPool 这个 bean 的创建依赖 RedisService，而在 RedisService 中又注入了 JedisPool，导致循环依赖。
+ * 把 JedisPool 这个 bean 单独构建文件 RedisPoolFactory 用于实例化。
+ * --------------------------------------
+ * @ClassName: RedisPoolFactory.java
+ * @Date: 2020/8/7 17:20
  * @SoftWare: IntelliJ IDEA
  * --------------------------------------
  * @Author: lixj
  * @Contact: lixj_zj@163.com
  **/
-@Component
-public class RedisService {
-
-    @Autowired
-    JedisPool jedisPool;
-
+@Service
+public class RedisPoolFactory {
     @Autowired
     RedisConfig redisConfig;
-
-    public <T> T get(String key) {
-        Jedis jedis = null;
-        try {
-            jedis = jedisPool.getResource();
-            T t = stringToBean(jedis);
-            return t;
-        } finally {
-            returnToPool(jedis);
-        }
-    }
-
-    private <T> T stringToBean(String string) {
-
-        return null;
-    }
-
-
-    private void returnToPool(Jedis jedis) {
-        if (null != jedis) {
-            jedis.close();
-        }
-    }
-
 
     @Bean
     public JedisPool JedisPoolFactory() {
