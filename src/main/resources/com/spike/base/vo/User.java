@@ -1,21 +1,14 @@
 package com.spike.base.vo;
 
-import org.hibernate.validator.constraints.Length;
-import com.spike.validator.IsMobile;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class User {
     private Long id;
 
-    @NotNull
-    @IsMobile
     private String mobile;
 
     private String nickname;
 
-    @NotNull
-    @Length(min = 32)
     private String password;
 
     private String salt;

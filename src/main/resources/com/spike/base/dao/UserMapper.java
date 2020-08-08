@@ -1,17 +1,11 @@
 package com.spike.base.dao;
 
 import com.spike.base.vo.User;
-import java.util.List;
-
 import com.spike.base.vo.UserExample;
-import org.apache.ibatis.annotations.Mapper;
+import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
-@Mapper
-public interface UserDao {
+public interface UserMapper {
     int countByExample(UserExample example);
 
     int deleteByExample(UserExample example);
@@ -33,10 +27,4 @@ public interface UserDao {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
-
-    @Select("select * from user where mobile = #{mobile}")
-    User selectByMobile(@Param("mobile") String mobile);
-
-    @Select("select * from user")
-    List<User> selectAll();
 }

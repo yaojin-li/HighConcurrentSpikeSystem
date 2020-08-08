@@ -71,8 +71,8 @@ public class SimpleController {
     @ResponseBody
     public Result<String> redisSet() {
         User user = new User();
-        user.setId(1);
-        user.setName("test_demo");
+        user.setId(Long.valueOf(1));
+        user.setNickname("test_demo");
         if (redisService.set(UserKey.getById,"0", user)){
             return Result.sucess("true");
         }
