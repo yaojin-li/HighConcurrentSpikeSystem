@@ -11,8 +11,10 @@ package com.spike.common;
  **/
 public abstract class BasePrefix implements KeyPrefix {
 
+    // 过期时间
     private int expireSeconds;
 
+    // 前缀
     private String prefix;
 
     public BasePrefix(int expireSeconds, String prefix) {

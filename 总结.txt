@@ -43,3 +43,14 @@ Mybatis-generator
     使用yaml配置文件；
     dao文件中使用@Mapper注解，或application启动文件中@MapperScan注解配置扫描包的路径 //@MapperScan("com.spike.base.dao")
 
+
+
+
+
+分布式session：
+token 写入到cookie，token 与 userinfo 存入redis，跳转时 cookie 加入到response，
+在同一个 session 中，cookie 会带入到下一个跳转页面。
+uuid->token->cookie->session
+           ->redis
+
+
