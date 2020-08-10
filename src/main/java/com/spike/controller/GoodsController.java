@@ -1,7 +1,9 @@
 package com.spike.controller;
 
+import com.spike.base.vo.Goods;
 import com.spike.base.vo.User;
 import com.spike.common.UserTokenPrefix;
+import com.spike.service.GoodsService;
 import com.spike.service.RedisService;
 import com.spike.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @Description: --------------------------------------
@@ -33,6 +36,9 @@ public class GoodsController {
     @Autowired
     public UserService userService;
 
+    @Autowired
+    public GoodsService goodsService;
+
     @RequestMapping("/to_list")
     public String toList(Model model,
                          @CookieValue(value = UserService.TOKEN_NAME_IN_COOKIE, required = false) String cookieToken,
@@ -47,7 +53,25 @@ public class GoodsController {
         // 通过token从redis中获取user
         User user = userService.getUserByTokenFromRedis(token);
         model.addAttribute("user", user);
+
+        //
+        List<Goods> goodsList = goodsService.listGoods();
+        model.addAttribute("goodsList", goodsList);
         return "goods_list";
     }
+
+    @RequestMapping("test")
+    public void test(){
+        List<Goods> goods = goodsService.listGoods();
+        System.out.println(goods);
+    }
+
+    @RequestMapping("test1")
+    public void test1(){
+        List<User> users = userService.selectAll();
+        System.out.println(users);
+    }
+
+
 
 }

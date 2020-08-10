@@ -3,9 +3,13 @@ package com.spike.base.vo;
 import org.hibernate.validator.constraints.Length;
 import com.spike.validator.IsMobile;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 
-public class User {
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 9180277090942671378L;
+
     private Long id;
 
     @NotNull
