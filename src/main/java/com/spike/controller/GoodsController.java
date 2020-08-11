@@ -82,7 +82,7 @@ public class GoodsController {
 
         //活动未开始
         if (nowTime < startTime) {
-            remainSeconds = (int) (nowTime - startTime) / 1000;
+            remainSeconds = (int) (startTime - nowTime) / 1000;
         } else if (nowTime > endTime) {
             // 活动已经结束
             miaoshaStatus = 2;
