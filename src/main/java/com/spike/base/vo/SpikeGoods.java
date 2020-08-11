@@ -3,7 +3,7 @@ package com.spike.base.vo;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class SpikeGoods {
+public class SpikeGoods extends Goods{
     private Long id;
 
     private Long goodsId;

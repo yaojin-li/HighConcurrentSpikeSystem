@@ -40,10 +40,10 @@ public class UserService {
     public static final String TOKEN_NAME_IN_COOKIE = "token";
 
     @Autowired
-    private UserDao userDao;
+    public UserDao userDao;
 
     @Autowired
-    private RedisService redisService;
+    public RedisService redisService;
 
     public List<User> selectAll() {
         return userDao.selectAll();

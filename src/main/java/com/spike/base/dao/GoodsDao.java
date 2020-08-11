@@ -4,6 +4,7 @@ import com.spike.base.vo.Goods;
 import com.spike.base.vo.GoodsExample;
 import java.util.List;
 
+import com.spike.base.vo.SpikeGoods;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -37,13 +38,5 @@ public interface GoodsDao {
     int updateByPrimaryKeyWithBLOBs(Goods record);
 
     int updateByPrimaryKey(Goods record);
-
-
-//    @Select("select g.*,mg.stock_count, mg.start_date, mg.end_date,mg.spike_price s from spike_goods mg left join goods g on mg.goods_id = g.id")
-//    List<Goods> listGoods();
-
-
-    @Select("select * from goods")
-    List<Goods> listGoods();
 
 }

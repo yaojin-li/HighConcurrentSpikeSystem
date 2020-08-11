@@ -35,6 +35,5 @@ public interface UserDao {
     @Select("select * from user where mobile = #{mobile}")
     User selectByMobile(@Param("mobile") String mobile);
 
-    @Select("select * from user")
     List<User> selectAll();
 }

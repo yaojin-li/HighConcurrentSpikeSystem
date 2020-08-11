@@ -1,8 +1,10 @@
 package com.spike.service;
 
 import com.spike.base.dao.GoodsDao;
+import com.spike.base.dao.SpikeGoodsDao;
 import com.spike.base.dao.UserDao;
 import com.spike.base.vo.Goods;
+import com.spike.base.vo.SpikeGoods;
 import com.spike.base.vo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,9 +24,14 @@ import java.util.List;
 public class GoodsService {
 
     @Autowired
-    private GoodsDao goodsDao;
+    private SpikeGoodsDao spikeGoodsDao;
 
-    public List<Goods> listGoods(){
-        return goodsDao.listGoods();
+    public List<SpikeGoods> listGoods(){
+        return spikeGoodsDao.listGoods();
     }
+
+    public SpikeGoods getSpikeGoodsByGoodsId(String goodsId){
+        return spikeGoodsDao.getSpikeGoodsByGoodsId(goodsId);
+    }
+
 }
