@@ -25,7 +25,7 @@
 
         <!--mysql-->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/spike?useUnicode=true&amp;characterEncoding=UTF8&amp;useSSL=false"
+                        connectionURL="jdbc:mysql://localhost:3306/miaosha?useUnicode=true&amp;characterEncoding=UTF8&amp;useSSL=false"
                         userId="root"
                         password="123456789">
         </jdbcConnection>
@@ -37,7 +37,7 @@
         </javaTypeResolver>
 
         <!-- targetProject:生成VO类的位置 -->
-        <javaModelGenerator targetPackage="com.spike.base.vo"
+        <javaModelGenerator targetPackage="com.miaosha.base.vo"
                             targetProject="src/main/resources">
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false" />
@@ -49,7 +49,7 @@
            如果maven工程只是单独的一个工程，targetProject="src/main/java"
            若果maven工程是分模块的工程，targetProject="所属模块的名称"，例如：
            targetProject="ecps-manager-mapper"，下同-->
-        <sqlMapGenerator targetPackage="com.spike.base.mapping"
+        <sqlMapGenerator targetPackage="com.miaosha.base.mapping"
                          targetProject="src/main/resources">
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false" />
@@ -57,13 +57,13 @@
 
         <!-- targetPackage：mapper接口dao生成的位置 -->
         <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="com.spike.base.dao"
+                             targetPackage="com.miaosha.base.dao"
                              targetProject="src/main/resources">
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false" />
         </javaClientGenerator>
         <!-- 指定数据库表 -->
-        <table schema="" tableName="spike_order"></table>
+        <table schema="" tableName="order"></table>
     </context>
 </generatorConfiguration>
 

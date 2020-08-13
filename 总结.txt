@@ -41,7 +41,7 @@ Mybatis-generator
 
 没有 dao 的 bean：
     使用yaml配置文件；
-    dao文件中使用@Mapper注解，或application启动文件中@MapperScan注解配置扫描包的路径 //@MapperScan("com.spike.base.dao")
+    dao文件中使用@Mapper注解，或application启动文件中@MapperScan注解配置扫描包的路径 //@MapperScan("com.miaosha.base.dao")
 
 
 
