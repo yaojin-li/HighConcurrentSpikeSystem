@@ -52,8 +52,8 @@ public class MiaoshaController {
         }
 
         // 查秒杀订单 miaosha_order
-        Order order = orderService.queryOrderByUserIdGoodsId(user.getId(), Long.valueOf(goodsId));
-        if (null != order){
+        MiaoshaOrder order = orderService.queryOrderByUserIdGoodsId(user.getId(), Long.valueOf(goodsId));
+        if (null != order) {
             logger.error(String.format("用户[%s]秒杀失败，原因：%s", user.getMobile(), CodeMsg.REPEATE_MIAOSHA.getMsg()));
             model.addAttribute("errmsg", CodeMsg.REPEATE_MIAOSHA.getMsg());
             return "miaosha_fail";
@@ -62,7 +62,7 @@ public class MiaoshaController {
         // 新增秒杀
         OrderInfo orderInfo = miaoshaService.doMiaosha(user, miaoshaGoods);
         model.addAttribute("orderInfo", orderInfo);
-        model.addAttribute("miaoshaGoods", miaoshaGoods);
+        model.addAttribute("goods", miaoshaGoods);
         return "order_detail";
     }
 

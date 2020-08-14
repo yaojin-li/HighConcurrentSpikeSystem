@@ -1,14 +1,16 @@
 package com.miaosha.service;
 
-import com.miaosha.base.dao.OrderDao;
+import com.miaosha.base.dao.MiaoshaOrderDao;
 import com.miaosha.base.dao.OrderInfoDao;
 import com.miaosha.base.vo.MiaoshaGoods;
-import com.miaosha.base.vo.Order;
+import com.miaosha.base.vo.MiaoshaOrder;
 import com.miaosha.base.vo.OrderInfo;
 import com.miaosha.base.vo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 /**
  * @Description: --------------------------------------
@@ -23,13 +25,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderService {
 
     @Autowired
-    OrderDao orderDao;
+    MiaoshaOrderDao miaoshaOrderDao;
 
     @Autowired
     OrderInfoDao orderInfoDao;
 
-    public Order queryOrderByUserIdGoodsId(Long userId, Long goodsId) {
-        return orderDao.queryOrderByUserIdGoodsId(userId, goodsId);
+    public MiaoshaOrder queryOrderByUserIdGoodsId(Long userId, Long goodsId) {
+        return miaoshaOrderDao.queryOrderByUserIdGoodsId(userId, goodsId);
     }
 
     @Transactional
@@ -37,21 +39,22 @@ public class OrderService {
         // 秒杀订单
         OrderInfo orderInfo = new OrderInfo();
         orderInfo.setUserId(user.getId());
-        orderInfo.setGoodsId(miaoshaGoods.getGoodsId());
+        orderInfo.setGoodsId(miaoshaGoods.getId());
         orderInfo.setDeliveryAddrId(0L);
         orderInfo.setGoodsCount(1);
         orderInfo.setGoodsName(miaoshaGoods.getGoodsName());
         orderInfo.setGoodsPrice(miaoshaGoods.getMiaoshaPrice());
         orderInfo.setOrderChannel(1);
-        orderInfo.setStartus(0);
-        orderInfoDao.insert(orderInfo);
+        orderInfo.setStatus(0);
+        orderInfo.setCreateDate(new Date());
+        Long.valueOf(orderInfoDao.insert(orderInfo));
 
         //
-        Order order = new Order();
-        order.setGoodsId(miaoshaGoods.getGoodsId());
+        MiaoshaOrder order = new MiaoshaOrder();
+        order.setGoodsId(miaoshaGoods.getId());
         order.setOrderId(orderInfo.getId());
         order.setUserId(user.getId());
-        orderDao.insert(order);
+        miaoshaOrderDao.insert(order);
         return orderInfo;
     }
 }

@@ -3,7 +3,7 @@ package com.miaosha.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * @Contact: lixj_zj@163.com
  **/
 @Configuration
-public class WebConfig extends WebMvcConfigurerAdapter{
+public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
     UserArgumentResolver userArgumentResolver;

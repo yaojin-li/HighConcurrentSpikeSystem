@@ -60,4 +60,11 @@ uuid->token->cookie->session
 
 
 
+mybatis 全局加载 *.xml 配置：
+mybatis.mapperLocations = classpath*:com/miaosha/base/mapping/*.xml
+
+
+
+
+
 

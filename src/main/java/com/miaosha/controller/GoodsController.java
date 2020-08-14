@@ -5,6 +5,8 @@ import com.miaosha.base.vo.User;
 import com.miaosha.service.GoodsService;
 import com.miaosha.service.RedisService;
 import com.miaosha.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +27,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/goods")
 public class GoodsController {
+    public static final Logger logger = LoggerFactory.getLogger(GoodsController.class);
 
     @Autowired
     public RedisService redisService;
@@ -36,7 +39,7 @@ public class GoodsController {
     public GoodsService goodsService;
 
     @RequestMapping("/to_list")
-    public String toList(Model model,User user){
+    public String toList(Model model, User user) {
         // 全局参数配置 UserArgumentResolver
         model.addAttribute("user", user);
 
@@ -52,6 +55,11 @@ public class GoodsController {
         model.addAttribute("user", user);
 
         MiaoshaGoods miaoshaGoods = goodsService.getMiaoshaGoodsByGoodsId(goodsId);
+        if (null == miaoshaGoods) {
+            logger.error(String.format("商品id[%s]查询商品为空。", goodsId));
+            model.addAttribute("errmsg", "查询异常...");
+            return "miaosha_fail";
+        }
         model.addAttribute("goods", miaoshaGoods);
 
         long startTime = miaoshaGoods.getStartDate().getTime();

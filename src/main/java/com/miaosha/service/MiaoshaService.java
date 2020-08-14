@@ -1,7 +1,5 @@
 package com.miaosha.service;
 
-import com.miaosha.base.dao.MiaoshaGoodsDao;
-import com.miaosha.base.dao.OrderInfoDao;
 import com.miaosha.base.vo.MiaoshaGoods;
 import com.miaosha.base.vo.OrderInfo;
 import com.miaosha.base.vo.User;
@@ -34,7 +32,7 @@ public class MiaoshaService {
     @Transactional
     public OrderInfo doMiaosha(User user, MiaoshaGoods miaoshaGoods) {
         //减库存
-        goodsService.reduceStock(miaoshaGoods.getGoodsId());
+        goodsService.reduceStock(miaoshaGoods.getId());
 
         //下订单 写入秒杀订单 order_info maiosha_order
         return orderService.createOrder(user, miaoshaGoods);

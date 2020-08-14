@@ -24,9 +24,6 @@ public class GoodsService {
     @Autowired
     private MiaoshaGoodsDao miaoshaGoodsDao;
 
-    @Autowired
-    private UserDao userDao;
-
     public List<MiaoshaGoods> listGoods(){
         return miaoshaGoodsDao.listGoods();
     }

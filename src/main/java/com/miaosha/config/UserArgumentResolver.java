@@ -35,13 +35,15 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
      */
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
-        Class<?> clazz = methodParameter.getClass();
+        // 获取参数类型
+        Class<?> clazz = methodParameter.getParameterType();
         return clazz == User.class;
     }
 
 
     /**
      * 参数处理
+     * supportsParameter() 方法返回 true 时调用。
      */
     @Override
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
