@@ -68,3 +68,45 @@ mybatis.mapperLocations = classpath*:com/miaosha/base/mapping/*.xml
 
 
 
+JMeter 使用入门
+1.添加线程组
+2.添加监听器->聚合报告
+3.线程组右键->添加Sampler->HTTP请求
+
+JMeter自定义变量
+1.测试计划->添加配置文件->CSV Data Set Config （新建配置文件，引用配置文件）
+2.引用变量${}
+
+JMeter命令行
+1.在Windows上录好jmx
+2.命令行： sh jmeter.sh -n -t XXX.jmx -| result.jtl
+3.把result.jtl导入到JMeter
+
+Redis压测
+1.redis-benchmark -h 127.0.0.1 -p 6379 -c 100 -n 100000
+100个并发连接，100000个请求
+2.redis-benchmark -h 127.0.0.1 -p 6379 -q -d 100
+存取大小为100字节的数据包
+3.redis-benchmark -t set,lpush -q -n 100000
+只测试某些操作的性能（set、lpush 操作）
+4.redis-benchmark -n 100000 -q script load "redis.call('set', 'foo', 'bar')"
+只测试某些数值存取的性能（ redis.call('set', 'foo', 'bar') ）
+
+
+
+
+springboot 打 war 包：
+1.添加 spring-boot-starter-tomcat 的 provided (编译时)依赖
+2.添加 maven-war-plugin 插件
+
+
+
+
+
+
+
+
+
+
+
+

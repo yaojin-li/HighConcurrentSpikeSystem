@@ -11,7 +11,7 @@
  Target Server Version : 50717
  File Encoding         : 65001
 
- Date: 13/08/2020 14:16:47
+ Date: 14/08/2020 13:55:37
 */
 
 SET NAMES utf8mb4;
@@ -61,8 +61,8 @@ CREATE TABLE `miaosha_goods`  (
 -- ----------------------------
 -- Records of miaosha_goods
 -- ----------------------------
-INSERT INTO `miaosha_goods` VALUES (1, 1, 0.02, 10, '2020-08-13 10:39:59', '2020-08-13 10:41:30', '2020-08-10 11:05:16', NULL, NULL);
-INSERT INTO `miaosha_goods` VALUES (2, 2, 0.01, 10, '2020-08-10 11:05:26', '2020-08-11 17:40:21', '2020-08-10 11:05:26', NULL, NULL);
+INSERT INTO `miaosha_goods` VALUES (1, 1, 0.02, 3, '2020-08-13 10:39:59', '2020-08-16 10:41:30', '2020-08-10 11:05:16', NULL, NULL);
+INSERT INTO `miaosha_goods` VALUES (2, 2, 0.01, 6, '2020-08-10 11:05:26', '2020-08-16 17:40:21', '2020-08-10 11:05:26', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for miaosha_order
@@ -74,7 +74,13 @@ CREATE TABLE `miaosha_order`  (
   `order_id` bigint(20) NULL DEFAULT NULL COMMENT '订单id',
   `goods_id` bigint(20) NULL DEFAULT NULL COMMENT '商品id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of miaosha_order
+-- ----------------------------
+INSERT INTO `miaosha_order` VALUES (19, 1, 18, 2);
+INSERT INTO `miaosha_order` VALUES (21, 1, 20, 1);
 
 -- ----------------------------
 -- Table structure for order_info
@@ -88,15 +94,21 @@ CREATE TABLE `order_info`  (
   `goods_name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '冗余过来的商品名称',
   `goods_count` int(11) NULL DEFAULT NULL COMMENT '商品数量',
   `goods_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '商品价格',
-  `order_channel` tinyint(4) NULL DEFAULT NULL COMMENT '订单渠道。1pc,2android,3ios',
-  `startus` tinyint(4) NULL DEFAULT NULL COMMENT '订单状态。0新建未支付，1已支付，2已发货，3已收货，4已退款，5已完成',
+  `order_channel` int(4) NULL DEFAULT NULL COMMENT '订单渠道。1pc,2android,3ios',
+  `status` int(4) NULL DEFAULT NULL COMMENT '订单状态。0新建未支付，1已支付，2已发货，3已收货，4已退款，5已完成',
   `create_date` datetime(0) NULL DEFAULT NULL COMMENT '创建日期',
   `pay_date` datetime(0) NULL DEFAULT NULL COMMENT '付款日期',
   `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `note` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of order_info
+-- ----------------------------
+INSERT INTO `order_info` VALUES (18, 1, 2, 0, 'iphoneX', 1, 0.01, 1, 0, '2020-08-14 13:39:14', NULL, NULL, NULL, NULL);
+INSERT INTO `order_info` VALUES (20, 1, 1, 0, '华为Meta9', 1, 0.02, 1, 0, '2020-08-14 13:49:39', NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for user

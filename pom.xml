@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.spike</groupId>
+    <groupId>com.miaosha</groupId>
     <artifactId>HighConcurrentSpikeSystem</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -112,7 +112,15 @@
 
 
     <build>
+        <finalName>${project.artifactId}</finalName>
+
         <plugins>
+            <!--  -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
             <!--Mybatis-generator插件,用于自动生成Mapper和POJO-->
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
@@ -142,7 +150,7 @@
             </plugin>
         </plugins>
 
-        <!-- 自动扫描，打包相关 -->
+        <!-- 自动扫描 -->
         <resources>
             <resource>
                 <directory>src/main/java</directory>
