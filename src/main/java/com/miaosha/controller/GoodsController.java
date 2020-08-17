@@ -47,6 +47,12 @@ public class GoodsController {
         List<MiaoshaGoods> goodsList = goodsService.listGoods();
         model.addAttribute("goodsList", goodsList);
         return "goods_list";
+
+        //取缓存
+
+
+        //手动渲染
+
     }
 
 
