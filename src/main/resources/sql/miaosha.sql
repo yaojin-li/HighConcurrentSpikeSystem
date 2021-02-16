@@ -1,3 +1,9 @@
+
+DROP DATABASE IF EXISTS miaosha;
+CREATE DATABASE IF NOT EXISTS miaosha DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
+
+USE miaosha;
+
 /*
  Navicat Premium Data Transfer
 
