@@ -3,8 +3,8 @@ package com.miaosha.service;
 import com.miaosha.base.dao.UserDao;
 import com.miaosha.base.vo.User;
 import com.miaosha.common.CodeMsg;
+import com.miaosha.common.MiaoshaUserKey;
 import com.miaosha.common.Result;
-import com.miaosha.common.UserTokenPrefix;
 import com.miaosha.utils.MD5Util;
 import com.miaosha.utils.UUIDUtil;
 import org.slf4j.Logger;
@@ -93,7 +93,7 @@ public class UserService {
      * 将当前token与user的映射存储至redis
      */
     public void setTokenAndUserToRedis(String token, User user) {
-        redisService.set(UserTokenPrefix.token, token, user);
+        redisService.set(MiaoshaUserKey.token, token, user);
     }
 
     /**
@@ -102,7 +102,7 @@ public class UserService {
      */
     public void addCookie(HttpServletResponse response, String token) {
         Cookie cookie = new Cookie(TOKEN_NAME_IN_COOKIE, token);
-        cookie.setMaxAge(UserTokenPrefix.token.expireSeconds());
+        cookie.setMaxAge(MiaoshaUserKey.token.expireSeconds());
         cookie.setPath("/");
         response.addCookie(cookie);
     }
@@ -115,10 +115,50 @@ public class UserService {
         if (StringUtils.isEmpty(token)) {
             return null;
         }
-        User user = redisService.get(UserTokenPrefix.token, token, User.class);
+        User user = redisService.get(MiaoshaUserKey.token, token, User.class);
         // 延长有效期（加入redis并写入cookie）
         setTokenAndUserToRedis(token, user);
         return user;
+    }
+
+
+    /**
+     * 对象层级的缓存
+     * */
+    public User getById(long id) {
+        // 取缓存
+        User user = redisService.get(MiaoshaUserKey.getById, "" + id, User.class);
+        if (null != user) {
+            return user;
+        }
+        // 取数据库
+        user = userDao.selectByPrimaryKey(id);
+        if (user != null) {
+            redisService.set(MiaoshaUserKey.getById, "" + id, User.class);
+        }
+        return user;
+    }
+
+
+    public boolean updatePassword(String token, long id, String formPass){
+        //取user
+        User user = getById(id);
+        if (user == null){
+            log.error(CodeMsg.MOBILE_NOT_EXIST.getMsg());
+//            throw new Exception();
+            return false;
+        }
+        // 更新数据库
+        User toBeUpdate = new User();
+        toBeUpdate.setId(id);
+        toBeUpdate.setPassword(MD5Util.formPassToDBPass(formPass, user.getSalt()));
+        userDao.updateByPrimaryKey(toBeUpdate);
+        // 处理缓存
+        redisService.delete(MiaoshaUserKey.getById, ""+id);
+        user.setPassword(toBeUpdate.getPassword());
+        // 更新token，保持登录态
+        redisService.set(MiaoshaUserKey.token, token, user);
+        return true;
     }
 
 
