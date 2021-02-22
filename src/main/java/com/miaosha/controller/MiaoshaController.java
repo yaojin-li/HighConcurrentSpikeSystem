@@ -38,7 +38,11 @@ public class MiaoshaController {
     MiaoshaService miaoshaService;
 
     @RequestMapping("/do_miaosha")
-    public String miaosha(Model model, User user, HttpServletRequest request) {
+    public String miaosha(Model model, User user1, HttpServletRequest request) {
+        // TODO user 测试
+        User user = new User();
+        user.setId(Long.valueOf("99"));
+
         model.addAttribute("user", user);
 
         String goodsId = request.getParameter("goodsId");

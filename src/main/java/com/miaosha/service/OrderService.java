@@ -47,7 +47,7 @@ public class OrderService {
         orderInfo.setOrderChannel(1);
         orderInfo.setStatus(0);
         orderInfo.setCreateDate(new Date());
-        Long.valueOf(orderInfoDao.insert(orderInfo));
+        orderInfoDao.insert(orderInfo);
 
         //
         MiaoshaOrder order = new MiaoshaOrder();

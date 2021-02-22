@@ -1,7 +1,10 @@
 package com.miaosha.controller;
 
+import com.miaosha.base.vo.GoodsDetailVo;
 import com.miaosha.base.vo.MiaoshaGoods;
 import com.miaosha.base.vo.User;
+import com.miaosha.common.CodeMsg;
+import com.miaosha.common.Result;
 import com.miaosha.redis.GoodsKey;
 import com.miaosha.service.GoodsService;
 import com.miaosha.service.RedisService;
@@ -80,9 +83,9 @@ public class GoodsController {
     }
 
 
-    @RequestMapping(value = "/to_detail/{goodsId}", produces = "text/html")
+    @RequestMapping(value = "/to_detail2/{goodsId}", produces = "text/html")
     @ResponseBody
-    public String detail(HttpServletRequest request,
+    public String detail2(HttpServletRequest request,
                          HttpServletResponse response,
                          Model model, @PathVariable("goodsId") String goodsId, User user) {
         model.addAttribute("user", user);
@@ -138,4 +141,45 @@ public class GoodsController {
     }
 
 
+    @RequestMapping(value = "/detail/{goodsId}" )
+    @ResponseBody
+    public Result<GoodsDetailVo> detail(HttpServletRequest request,
+                                        HttpServletResponse response,
+                                        User user,
+                                        Model model, @PathVariable("goodsId") String goodsId) {
+        MiaoshaGoods miaoshaGoods = goodsService.getMiaoshaGoodsByGoodsId(goodsId);
+        if (null == miaoshaGoods) {
+            logger.error(String.format("商品id[%s]查询商品为空。", goodsId));
+            model.addAttribute("errmsg", "查询异常...");
+            return Result.error(CodeMsg.SERVER_ERROR);
+        }
+
+        long startTime = miaoshaGoods.getStartDate().getTime();
+        long endTime = miaoshaGoods.getEndDate().getTime();
+        long nowTime = System.currentTimeMillis();
+
+        // 秒杀状态
+        int miaoshaStatus = 0;
+        // 倒计时
+        int remainSeconds = 0;
+
+        //活动未开始
+        if (nowTime < startTime) {
+            remainSeconds = (int) (startTime - nowTime) / 1000;
+        } else if (nowTime > endTime) {
+            // 活动已经结束
+            miaoshaStatus = 2;
+            remainSeconds = -1;
+        } else { // 活动进行中
+            miaoshaStatus = 1;
+        }
+
+        GoodsDetailVo goodsDetailVo = new GoodsDetailVo();
+        goodsDetailVo.setGoods(miaoshaGoods);
+        goodsDetailVo.setUser(user);
+        goodsDetailVo.setRemainSeconds(remainSeconds);
+        goodsDetailVo.setMiaoshaStatus(miaoshaStatus);
+        return Result.sucess(goodsDetailVo);
+
+    }
 }

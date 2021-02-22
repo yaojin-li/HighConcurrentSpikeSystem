@@ -9,7 +9,7 @@
     <classPathEntry location="E:/workspace/toolsFile/mysql-connector-java-5.1.17.jar"/>
     <!--oracle-->
     <!--<classPathEntry location="E:/workspace/toolsFile/ojdbc14-10.2.0.3.0.jar" />-->
-    <context id="testTables" targetRuntime="MyBatis3">
+    <context id="testTables" targetRuntime="MyBatis3" defaultModelType="flat">
         <commentGenerator>
             <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
             <property name="suppressAllComments" value="true" />

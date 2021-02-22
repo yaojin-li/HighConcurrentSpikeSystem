@@ -109,21 +109,21 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.miaosha.base.vo.OrderInfo">
-    <selectKey keyColumn="id" resultType="long" keyProperty="id" order="AFTER">
-      select LAST_INSERT_ID()
-    </selectKey>
-    insert into order_info (id, user_id, goods_id, 
-      delivery_addr_id, goods_name, goods_count, 
-      goods_price, order_channel, status, 
-      create_date, pay_date, create_time, 
-      update_time, note)
-    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, 
-      #{deliveryAddrId,jdbcType=BIGINT}, #{goodsName,jdbcType=VARCHAR}, #{goodsCount,jdbcType=INTEGER}, 
-      #{goodsPrice,jdbcType=DECIMAL}, #{orderChannel,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{payDate,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{note,jdbcType=VARCHAR})
-  </insert>
+  <!--<insert id="insert" parameterType="com.miaosha.base.vo.OrderInfo">-->
+    <!--<selectKey keyColumn="id" resultType="long" keyProperty="id" order="AFTER">-->
+      <!--select LAST_INSERT_ID()-->
+    <!--</selectKey>-->
+    <!--insert into order_info (user_id, goods_id,-->
+      <!--delivery_addr_id, goods_name, goods_count, -->
+      <!--goods_price, order_channel, status, -->
+      <!--create_date, pay_date, create_time, -->
+      <!--update_time, note)-->
+    <!--values (#{userId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT},-->
+      <!--#{deliveryAddrId,jdbcType=BIGINT}, #{goodsName,jdbcType=VARCHAR}, #{goodsCount,jdbcType=INTEGER}, -->
+      <!--#{goodsPrice,jdbcType=DECIMAL}, #{orderChannel,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, -->
+      <!--#{createDate,jdbcType=TIMESTAMP}, #{payDate,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, -->
+      <!--#{updateTime,jdbcType=TIMESTAMP}, #{note,jdbcType=VARCHAR})-->
+  <!--</insert>-->
   <insert id="insertSelective" parameterType="com.miaosha.base.vo.OrderInfo">
     insert into order_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
