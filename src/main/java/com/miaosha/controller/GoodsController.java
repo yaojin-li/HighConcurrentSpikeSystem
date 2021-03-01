@@ -1,8 +1,5 @@
 package com.miaosha.controller;
 
-import com.miaosha.base.vo.GoodsDetailVo;
-import com.miaosha.base.vo.MiaoshaGoods;
-import com.miaosha.base.vo.User;
 import com.miaosha.common.CodeMsg;
 import com.miaosha.common.Result;
 import com.miaosha.redis.GoodsKey;
@@ -59,7 +56,7 @@ public class GoodsController {
         // 全局参数配置 UserArgumentResolver
         model.addAttribute("user", user);
 
-        // 先从缓存中获取
+        // 取缓存
         String html = redisService.get(GoodsKey.getGoodsList, "", String.class);
         if (!StringUtils.isEmpty(html)) {
             return html;
@@ -90,7 +87,7 @@ public class GoodsController {
                          Model model, @PathVariable("goodsId") String goodsId, User user) {
         model.addAttribute("user", user);
 
-        // 先从缓存中获取
+        // 取缓存
         String html = redisService.get(GoodsKey.getGoodsDetail, "" + goodsId, String.class);
         if (!StringUtils.isEmpty(html)) {
             return html;
@@ -104,16 +101,16 @@ public class GoodsController {
         }
         model.addAttribute("goods", miaoshaGoods);
 
+        long nowTime = System.currentTimeMillis();
         long startTime = miaoshaGoods.getStartDate().getTime();
         long endTime = miaoshaGoods.getEndDate().getTime();
-        long nowTime = System.currentTimeMillis();
 
         // 秒杀状态
         int miaoshaStatus = 0;
         // 倒计时
         int remainSeconds = 0;
 
-        //活动未开始
+        //活动未开始，倒计时
         if (nowTime < startTime) {
             remainSeconds = (int) (startTime - nowTime) / 1000;
         } else if (nowTime > endTime) {

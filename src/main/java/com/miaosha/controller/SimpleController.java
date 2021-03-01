@@ -1,6 +1,5 @@
 package com.miaosha.controller;
 
-import com.miaosha.base.vo.User;
 import com.miaosha.common.CodeMsg;
 import com.miaosha.common.Result;
 import com.miaosha.redis.UserKey;

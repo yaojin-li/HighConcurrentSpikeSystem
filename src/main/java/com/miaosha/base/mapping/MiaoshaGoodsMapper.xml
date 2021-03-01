@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.miaosha.base.dao.MiaoshaGoodsDao" >
+<mapper namespace="com.miaosha.base.dao.MiaoshaGoodsMapper" >
   <resultMap id="BaseResultMap" type="com.miaosha.base.vo.MiaoshaGoods" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="goods_id" property="goodsId" jdbcType="BIGINT" />
@@ -71,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, goods_id, miaosha_price, stock_count, start_date, end_date, create_time, update_time,
+    id, goods_id, miaosha_price, stock_count, start_date, end_date, create_time, update_time, 
     note
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.miaosha.base.vo.MiaoshaGoodsExample" >
@@ -89,7 +89,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select
+    select 
     <include refid="Base_Column_List" />
     from miaosha_goods
     where id = #{id,jdbcType=BIGINT}
@@ -105,12 +105,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.miaosha.base.vo.MiaoshaGoods" >
-    insert into miaosha_goods (id, goods_id, miaosha_price,
-      stock_count, start_date, end_date,
+    insert into miaosha_goods (id, goods_id, miaosha_price, 
+      stock_count, start_date, end_date, 
       create_time, update_time, note
       )
-    values (#{id,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{miaoshaPrice,jdbcType=DECIMAL},
-      #{stockCount,jdbcType=INTEGER}, #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP},
+    values (#{id,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{miaoshaPrice,jdbcType=DECIMAL}, 
+      #{stockCount,jdbcType=INTEGER}, #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{note,jdbcType=VARCHAR}
       )
   </insert>
@@ -219,14 +219,14 @@
   <update id="updateByExample" parameterType="map" >
     update miaosha_goods
     set id = #{record.id,jdbcType=BIGINT},
-    goods_id = #{record.goodsId,jdbcType=BIGINT},
-    miaosha_price = #{record.miaoshaPrice,jdbcType=DECIMAL},
-    stock_count = #{record.stockCount,jdbcType=INTEGER},
-    start_date = #{record.startDate,jdbcType=TIMESTAMP},
-    end_date = #{record.endDate,jdbcType=TIMESTAMP},
-    create_time = #{record.createTime,jdbcType=TIMESTAMP},
-    update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-    note = #{record.note,jdbcType=VARCHAR}
+      goods_id = #{record.goodsId,jdbcType=BIGINT},
+      miaosha_price = #{record.miaoshaPrice,jdbcType=DECIMAL},
+      stock_count = #{record.stockCount,jdbcType=INTEGER},
+      start_date = #{record.startDate,jdbcType=TIMESTAMP},
+      end_date = #{record.endDate,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      note = #{record.note,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>

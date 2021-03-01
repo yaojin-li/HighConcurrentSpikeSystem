@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.miaosha.base.dao.UserDao" >
+<mapper namespace="com.miaosha.base.dao.UserMapper" >
   <resultMap id="BaseResultMap" type="com.miaosha.base.vo.User" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="mobile" property="mobile" jdbcType="VARCHAR" />
@@ -74,7 +74,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, mobile, nickname, password, salt, head, register_date, last_login_date, login_count,
+    id, mobile, nickname, password, salt, head, register_date, last_login_date, login_count, 
     create_time, modify_time, note
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.miaosha.base.vo.UserExample" >
@@ -92,7 +92,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select
+    select 
     <include refid="Base_Column_List" />
     from user
     where id = #{id,jdbcType=BIGINT}
@@ -108,14 +108,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.miaosha.base.vo.User" >
-    insert into user (id, mobile, nickname,
-      password, salt, head,
-      register_date, last_login_date, login_count,
+    insert into user (id, mobile, nickname, 
+      password, salt, head, 
+      register_date, last_login_date, login_count, 
       create_time, modify_time, note
       )
-    values (#{id,jdbcType=BIGINT}, #{mobile,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR},
-      #{password,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{head,jdbcType=VARCHAR},
-      #{registerDate,jdbcType=TIMESTAMP}, #{lastLoginDate,jdbcType=TIMESTAMP}, #{loginCount,jdbcType=INTEGER},
+    values (#{id,jdbcType=BIGINT}, #{mobile,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{head,jdbcType=VARCHAR}, 
+      #{registerDate,jdbcType=TIMESTAMP}, #{lastLoginDate,jdbcType=TIMESTAMP}, #{loginCount,jdbcType=INTEGER}, 
       #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{note,jdbcType=VARCHAR}
       )
   </insert>
@@ -251,17 +251,17 @@
   <update id="updateByExample" parameterType="map" >
     update user
     set id = #{record.id,jdbcType=BIGINT},
-    mobile = #{record.mobile,jdbcType=VARCHAR},
-    nickname = #{record.nickname,jdbcType=VARCHAR},
-    password = #{record.password,jdbcType=VARCHAR},
-    salt = #{record.salt,jdbcType=VARCHAR},
-    head = #{record.head,jdbcType=VARCHAR},
-    register_date = #{record.registerDate,jdbcType=TIMESTAMP},
-    last_login_date = #{record.lastLoginDate,jdbcType=TIMESTAMP},
-    login_count = #{record.loginCount,jdbcType=INTEGER},
-    create_time = #{record.createTime,jdbcType=TIMESTAMP},
-    modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
-    note = #{record.note,jdbcType=VARCHAR}
+      mobile = #{record.mobile,jdbcType=VARCHAR},
+      nickname = #{record.nickname,jdbcType=VARCHAR},
+      password = #{record.password,jdbcType=VARCHAR},
+      salt = #{record.salt,jdbcType=VARCHAR},
+      head = #{record.head,jdbcType=VARCHAR},
+      register_date = #{record.registerDate,jdbcType=TIMESTAMP},
+      last_login_date = #{record.lastLoginDate,jdbcType=TIMESTAMP},
+      login_count = #{record.loginCount,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+      note = #{record.note,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -320,10 +320,4 @@
       note = #{note,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-
-
-  <select id="selectAll" resultMap="BaseResultMap" >
-    select * from user
-  </select>
-
 </mapper>

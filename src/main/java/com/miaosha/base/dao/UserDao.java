@@ -1,18 +1,15 @@
 package com.miaosha.base.dao;
 
-import com.miaosha.base.vo.User;
-import java.util.List;
 
-import com.miaosha.base.vo.UserExample;
+import com.miaosha.base.vo.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface UserDao {
-    int countByExample(UserExample example);
-
-    int deleteByExample(UserExample example);
 
     int deleteByPrimaryKey(Long id);
 
@@ -20,13 +17,7 @@ public interface UserDao {
 
     int insertSelective(User record);
 
-    List<User> selectByExample(UserExample example);
-
     User selectByPrimaryKey(Long id);
-
-    int updateByExampleSelective(@Param("record") User record, @Param("example") UserExample example);
-
-    int updateByExample(@Param("record") User record, @Param("example") UserExample example);
 
     int updateByPrimaryKeySelective(User record);
 

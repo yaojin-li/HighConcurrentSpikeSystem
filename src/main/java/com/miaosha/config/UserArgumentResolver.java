@@ -1,6 +1,5 @@
 package com.miaosha.config;
 
-import com.miaosha.base.vo.User;
 import com.miaosha.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
@@ -49,6 +48,10 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
         HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
         HttpServletResponse response = nativeWebRequest.getNativeResponse(HttpServletResponse.class);
+
+        if (null == request){
+            return null;
+        }
 
         // 从请求中获取token
         String paramToken = request.getParameter(UserService.TOKEN_NAME_IN_COOKIE);

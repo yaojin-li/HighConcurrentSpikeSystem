@@ -1,25 +1,14 @@
 package com.miaosha.base.vo;
 
-import org.hibernate.validator.constraints.Length;
-import com.miaosha.validator.IsMobile;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.util.Date;
 
-public class User implements Serializable {
-
-    private static final long serialVersionUID = 9180277090942671378L;
-
+public class User {
     private Long id;
 
-    @NotNull
-    @IsMobile
     private String mobile;
 
     private String nickname;
 
-    @NotNull
-    @Length(min = 32)
     private String password;
 
     private String salt;

@@ -1,9 +1,6 @@
 package com.miaosha.service;
 
 import com.miaosha.base.dao.MiaoshaGoodsDao;
-import com.miaosha.base.dao.UserDao;
-import com.miaosha.base.vo.Goods;
-import com.miaosha.base.vo.MiaoshaGoods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +25,7 @@ public class GoodsService {
         return miaoshaGoodsDao.listGoods();
     }
 
-    public MiaoshaGoods getMiaoshaGoodsByGoodsId(String goodsId){
+    public MiaoshaGoods getMiaoshaGoodsByGoodsId(Long goodsId){
         return miaoshaGoodsDao.getMiaoshaGoodsByGoodsId(goodsId);
     }
 

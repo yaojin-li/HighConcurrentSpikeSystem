@@ -1,7 +1,6 @@
 package com.miaosha.service;
 
 import com.miaosha.base.dao.UserDao;
-import com.miaosha.base.vo.User;
 import com.miaosha.common.CodeMsg;
 import com.miaosha.common.MiaoshaUserKey;
 import com.miaosha.common.Result;

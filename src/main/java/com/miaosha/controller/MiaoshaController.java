@@ -2,15 +2,20 @@ package com.miaosha.controller;
 
 import com.miaosha.base.vo.*;
 import com.miaosha.common.CodeMsg;
+import com.miaosha.common.Result;
 import com.miaosha.service.GoodsService;
 import com.miaosha.service.MiaoshaService;
 import com.miaosha.service.OrderService;
+import org.aspectj.apache.bcel.classfile.Code;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -37,37 +42,29 @@ public class MiaoshaController {
     @Autowired
     MiaoshaService miaoshaService;
 
-    @RequestMapping("/do_miaosha")
-    public String miaosha(Model model, User user1, HttpServletRequest request) {
-        // TODO user 测试
-        User user = new User();
-        user.setId(Long.valueOf("99"));
-
+    @RequestMapping(value = "/do_miaosha", method = RequestMethod.POST)
+    public Result<OrderInfo> miaosha(Model model, User user, HttpServletRequest request, @RequestParam("goodsId") long goodsId)  {
         model.addAttribute("user", user);
+        if (ObjectUtils.isEmpty(user)){
+            return Result.error(CodeMsg.SESSION_ERROR);
+        }
 
-        String goodsId = request.getParameter("goodsId");
-
-        // 查库存
+        // 判断库存
         MiaoshaGoods miaoshaGoods = goodsService.getMiaoshaGoodsByGoodsId(goodsId);
-        if (miaoshaGoods.getStockCount() <= 0) {
-            logger.error(String.format("用户[%s]秒杀失败，原因：%s", user.getMobile(), CodeMsg.MIAO_SHA_OVER.getMsg()));
-            model.addAttribute("errmsg", CodeMsg.MIAO_SHA_OVER.getMsg());
-            return "miaosha_fail";
+        int stock = miaoshaGoods.getStockCount();
+        if (stock <= 0) {
+            return Result.error(CodeMsg.MIAO_SHA_OVER);
         }
 
-        // 查秒杀订单 miaosha_order
-        MiaoshaOrder order = orderService.queryOrderByUserIdGoodsId(user.getId(), Long.valueOf(goodsId));
-        if (null != order) {
-            logger.error(String.format("用户[%s]秒杀失败，原因：%s", user.getMobile(), CodeMsg.REPEATE_MIAOSHA.getMsg()));
-            model.addAttribute("errmsg", CodeMsg.REPEATE_MIAOSHA.getMsg());
-            return "miaosha_fail";
+        // 查秒杀订单 miaosha_order 判断是否已经秒杀到了
+        MiaoshaOrder order = orderService.queryOrderByUserIdGoodsId(user.getId(), goodsId);
+        if (ObjectUtils.isEmpty(order)) {
+            return Result.error(CodeMsg.REPEATE_MIAOSHA);
         }
 
-        // 新增秒杀
+        // 减库存 下订单 写入秒杀订单
         OrderInfo orderInfo = miaoshaService.doMiaosha(user, miaoshaGoods);
-        model.addAttribute("orderInfo", orderInfo);
-        model.addAttribute("goods", miaoshaGoods);
-        return "order_detail";
+        return Result.sucess(orderInfo);
     }
 
 }

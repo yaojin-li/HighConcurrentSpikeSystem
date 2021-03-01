@@ -3,7 +3,7 @@ package com.miaosha.base.vo;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class MiaoshaGoods extends Goods{
+public class MiaoshaGoods {
     private Long id;
 
     private Long goodsId;

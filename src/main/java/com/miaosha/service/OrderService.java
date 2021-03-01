@@ -2,10 +2,6 @@ package com.miaosha.service;
 
 import com.miaosha.base.dao.MiaoshaOrderDao;
 import com.miaosha.base.dao.OrderInfoDao;
-import com.miaosha.base.vo.MiaoshaGoods;
-import com.miaosha.base.vo.MiaoshaOrder;
-import com.miaosha.base.vo.OrderInfo;
-import com.miaosha.base.vo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
