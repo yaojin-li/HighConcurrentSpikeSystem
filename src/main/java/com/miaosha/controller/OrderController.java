@@ -59,4 +59,5 @@ public class OrderController {
         vo.setOrder(order);
         vo.setGoods(goods);
         return Result.success(vo);
+        // TODO LXJ 超卖：数据库唯一索引 + 减库存判断当前库存量>0
     }
