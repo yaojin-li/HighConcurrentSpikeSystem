@@ -1,47 +1,43 @@
 package com.miaosha.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.miaosha.service.UserService;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
+import com.miaosha.redis.RedisService;
+import com.miaosha.result.Result;
+import com.miaosha.service.MiaoshaUserService;
+import com.miaosha.vo.LoginVo;
 
-/**
- * @Description: --------------------------------------
- * @ClassName: LoginController.java
- * @Date: 2020/8/8 16:22
- * @SoftWare: IntelliJ IDEA
- * --------------------------------------
- * @Author: lixj
- * @Contact: lixj_zj@163.com
- **/
 @Controller
 @RequestMapping("/login")
 public class LoginController {
 
-    @Autowired
-    public UserService userService;
-
+	private static Logger log = LoggerFactory.getLogger(LoginController.class);
+	
+	@Autowired
+	MiaoshaUserService userService;
+	
+	@Autowired
+	RedisService redisService;
+	
     @RequestMapping("/to_login")
-    public String toLogin(){
+    public String toLogin() {
         return "login";
     }
-
-    /**
-     * 登录
-     * */
+    
     @RequestMapping("/do_login")
     @ResponseBody
-    public String doLogin(HttpServletRequest request, HttpServletResponse response){//为什么是response，保证同一个请求？
-        Map<String, Object> result = userService.login(request, response);
-        return JSONObject.toJSONString(result);
+    public Result<String> doLogin(HttpServletResponse response, @Valid LoginVo loginVo) {
+    	log.info(loginVo.toString());
+    	//登录
+    	String token = userService.login(response, loginVo);
+    	return Result.success(token);
     }
-
-
-
 }

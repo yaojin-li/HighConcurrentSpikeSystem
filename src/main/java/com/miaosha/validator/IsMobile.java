@@ -1,37 +1,30 @@
 package com.miaosha.validator;
 
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.CONSTRUCTOR;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
 import javax.validation.Constraint;
 import javax.validation.Payload;
-import java.lang.annotation.*;
 
-/**
- * @Description: --------------------------------------
- * @ClassName: IsMobile.java
- * @Date: 2020/8/8 21:47
- * @SoftWare: IntelliJ IDEA
- * --------------------------------------
- * @Author: lixj
- * @Contact: lixj_zj@163.com
- **/
-@Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE})
-@Retention(RetentionPolicy.RUNTIME)
+@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
+@Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = {IsMobileValidator.class})  //表示校验此注解的校验器类
-public @interface IsMobile {
+@Constraint(validatedBy = {IsMobileValidator.class })
+public @interface  IsMobile {
+	
+	boolean required() default true;
+	
+	String message() default "手机号码格式错误";
 
-    boolean required() default true;
+	Class<?>[] groups() default { };
 
-    String message() default "手机号码格式错误";
-
-    Class<?>[] groups() default {};
-
-    Class<? extends Payload>[] payload() default {};
+	Class<? extends Payload>[] payload() default { };
 }
-
-
-
-
-
-
-
-

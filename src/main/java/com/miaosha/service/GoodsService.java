@@ -1,37 +1,34 @@
 package com.miaosha.service;
 
-import com.miaosha.base.dao.MiaoshaGoodsDao;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.miaosha.dao.GoodsDao;
+import com.miaosha.domain.MiaoshaGoods;
+import com.miaosha.vo.GoodsVo;
 
-/**
- * @Description: --------------------------------------
- * @ClassName: GoodsService.java
- * @Date: 2020/8/10 13:55
- * @SoftWare: IntelliJ IDEA
- * --------------------------------------
- * @Author: lixj
- * @Contact: lixj_zj@163.com
- **/
 @Service
 public class GoodsService {
+	
+	@Autowired
+	GoodsDao goodsDao;
+	
+	public List<GoodsVo> listGoodsVo(){
+		return goodsDao.listGoodsVo();
+	}
 
-    @Autowired
-    private MiaoshaGoodsDao miaoshaGoodsDao;
+	public GoodsVo getGoodsVoByGoodsId(long goodsId) {
+		return goodsDao.getGoodsVoByGoodsId(goodsId);
+	}
 
-    public List<MiaoshaGoods> listGoods(){
-        return miaoshaGoodsDao.listGoods();
-    }
-
-    public MiaoshaGoods getMiaoshaGoodsByGoodsId(Long goodsId){
-        return miaoshaGoodsDao.getMiaoshaGoodsByGoodsId(goodsId);
-    }
-
-    // 减库存
-    public void reduceStock(Long goodsId){
-        miaoshaGoodsDao.reduceStock(goodsId);
-    }
-
+	public void reduceStock(GoodsVo goods) {
+		MiaoshaGoods g = new MiaoshaGoods();
+		g.setGoodsId(goods.getId());
+		goodsDao.reduceStock(g);
+	}
+	
+	
+	
 }

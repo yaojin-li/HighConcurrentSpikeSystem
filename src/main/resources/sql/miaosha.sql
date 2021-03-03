@@ -1,23 +1,17 @@
-
-DROP DATABASE IF EXISTS miaosha;
-CREATE DATABASE IF NOT EXISTS miaosha DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
-
-USE miaosha;
-
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost
+ Source Server         : localhost root&123456789
  Source Server Type    : MySQL
- Source Server Version : 50717
+ Source Server Version : 80015
  Source Host           : localhost:3306
  Source Schema         : miaosha
 
  Target Server Type    : MySQL
- Target Server Version : 50717
+ Target Server Version : 80015
  File Encoding         : 65001
 
- Date: 14/08/2020 13:55:37
+ Date: 03/03/2021 23:29:28
 */
 
 SET NAMES utf8mb4;
@@ -67,8 +61,8 @@ CREATE TABLE `miaosha_goods`  (
 -- ----------------------------
 -- Records of miaosha_goods
 -- ----------------------------
-INSERT INTO `miaosha_goods` VALUES (1, 1, 0.02, 3, '2020-08-13 10:39:59', '2020-08-16 10:41:30', '2020-08-10 11:05:16', NULL, NULL);
-INSERT INTO `miaosha_goods` VALUES (2, 2, 0.01, 6, '2020-08-10 11:05:26', '2020-08-16 17:40:21', '2020-08-10 11:05:26', NULL, NULL);
+INSERT INTO `miaosha_goods` VALUES (1, 1, 0.02, 49, '2021-02-20 11:17:20', '2021-03-27 11:41:30', '2020-08-10 11:05:16', NULL, NULL);
+INSERT INTO `miaosha_goods` VALUES (2, 2, 0.01, 58, '2021-02-20 11:05:26', '2021-03-28 17:40:21', '2020-08-10 11:05:26', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for miaosha_order
@@ -79,14 +73,41 @@ CREATE TABLE `miaosha_order`  (
   `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户id',
   `order_id` bigint(20) NULL DEFAULT NULL COMMENT '订单id',
   `goods_id` bigint(20) NULL DEFAULT NULL COMMENT '商品id',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `INDEX_USERID_GOODSID`(`user_id`, `goods_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of miaosha_order
 -- ----------------------------
-INSERT INTO `miaosha_order` VALUES (19, 1, 18, 2);
-INSERT INTO `miaosha_order` VALUES (21, 1, 20, 1);
+INSERT INTO `miaosha_order` VALUES (30, 99, 52, 2);
+INSERT INTO `miaosha_order` VALUES (31, 1, 1, 2);
+INSERT INTO `miaosha_order` VALUES (32, 1, 1, 1);
+
+-- ----------------------------
+-- Table structure for miaosha_user
+-- ----------------------------
+DROP TABLE IF EXISTS `miaosha_user`;
+CREATE TABLE `miaosha_user`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `mobile` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '手机号',
+  `nickname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '昵称',
+  `password` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'MD5(MD5(pass明文+固定salt)+salt)',
+  `salt` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `head` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '头像，云储存ID',
+  `register_date` datetime(0) NULL DEFAULT NULL COMMENT '注册时间',
+  `last_login_date` datetime(0) NULL DEFAULT NULL COMMENT '上次登录时间',
+  `login_count` int(11) NULL DEFAULT NULL COMMENT '登录次数',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
+  `note` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备用字段',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of miaosha_user
+-- ----------------------------
+INSERT INTO `miaosha_user` VALUES (1, '15021952888', '张三', 'b7797cce01b4b131b433b6acf4add449', '1a2b3c4d', 'head', '2020-08-08 11:04:50', '2020-08-08 11:04:53', 1, '2020-08-08 11:04:17', '2020-08-11 09:56:02', '备注');
 
 -- ----------------------------
 -- Table structure for order_info
@@ -108,37 +129,23 @@ CREATE TABLE `order_info`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `note` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 53 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of order_info
 -- ----------------------------
-INSERT INTO `order_info` VALUES (18, 1, 2, 0, 'iphoneX', 1, 0.01, 1, 0, '2020-08-14 13:39:14', NULL, NULL, NULL, NULL);
-INSERT INTO `order_info` VALUES (20, 1, 1, 0, '华为Meta9', 1, 0.02, 1, 0, '2020-08-14 13:49:39', NULL, NULL, NULL, NULL);
+INSERT INTO `order_info` VALUES (52, 99, 2, NULL, 'iphoneX', 1, 0.01, 1, 0, '2021-02-20 12:06:52', NULL, '2021-02-20 12:06:54', NULL, NULL);
+INSERT INTO `order_info` VALUES (53, 1, 2, NULL, 'iphoneX', 1, 0.01, 1, 0, '2021-03-03 23:28:19', NULL, '2021-03-03 23:28:19', NULL, NULL);
+INSERT INTO `order_info` VALUES (54, 1, 1, NULL, '华为Meta9', 1, 0.02, 1, 0, '2021-03-03 23:28:55', NULL, '2021-03-03 23:28:55', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for user
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增id',
-  `mobile` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '手机号',
-  `nickname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '昵称',
-  `password` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'MD5(MD5(pass明文+固定salt)+salt)',
-  `salt` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `head` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '头像，云储存ID',
-  `register_date` datetime(0) NULL DEFAULT NULL COMMENT '注册时间',
-  `last_login_date` datetime(0) NULL DEFAULT NULL COMMENT '上次登录时间',
-  `login_count` int(11) NULL DEFAULT NULL COMMENT '登录次数',
-  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-  `note` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备用字段',
+  `id` int(11) NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of user
--- ----------------------------
-INSERT INTO `user` VALUES (1, '15021952888', '张三', '5dc95df12b8f7bbb3f2152d7c874aa79', '1a2b3c4d', 'head', '2020-08-08 11:04:50', '2020-08-08 11:04:53', 1, '2020-08-08 11:04:17', '2020-08-11 09:56:02', '备注');
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;

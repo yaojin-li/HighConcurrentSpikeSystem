@@ -1,182 +1,159 @@
 package com.miaosha.controller;
 
-import com.miaosha.common.CodeMsg;
-import com.miaosha.common.Result;
-import com.miaosha.redis.GoodsKey;
-import com.miaosha.service.GoodsService;
-import com.miaosha.service.RedisService;
-import com.miaosha.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.miaosha.result.CodeMsg;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.thymeleaf.context.WebContext;
+
+import com.miaosha.domain.MiaoshaUser;
+import com.miaosha.redis.GoodsKey;
+import com.miaosha.redis.RedisService;
+import com.miaosha.result.Result;
+import com.miaosha.service.GoodsService;
+import com.miaosha.service.MiaoshaUserService;
+import com.miaosha.vo.GoodsDetailVo;
+import com.miaosha.vo.GoodsVo;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
-import org.thymeleaf.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-
-/**
- * @Description: --------------------------------------
- * @ClassName: GoodsController.java
- * @Date: 2020/8/8 19:04
- * @SoftWare: IntelliJ IDEA
- * --------------------------------------
- * @Author: lixj
- * @Contact: lixj_zj@163.com
- **/
 @Controller
 @RequestMapping("/goods")
 public class GoodsController {
-    public static final Logger logger = LoggerFactory.getLogger(GoodsController.class);
 
-    @Autowired
-    public RedisService redisService;
-
-    @Autowired
-    public UserService userService;
-
-    @Autowired
-    public GoodsService goodsService;
-
-    @Autowired
-    ThymeleafViewResolver thymeleafViewResolver;
-
-    @RequestMapping(value = "/to_list", produces = "text/html")
+	@Autowired
+	MiaoshaUserService userService;
+	
+	@Autowired
+	RedisService redisService;
+	
+	@Autowired
+	GoodsService goodsService;
+	
+	@Autowired
+	ThymeleafViewResolver thymeleafViewResolver;
+	
+	@Autowired
+	ApplicationContext applicationContext;
+	
+	/**
+	 * QPS:1267 load:15 mysql
+	 * 5000 * 10
+	 * QPS:2884, load:5 
+	 * */
+    @RequestMapping(value="/to_list", produces="text/html")
     @ResponseBody
-    public String toList(HttpServletRequest request,
-                         HttpServletResponse response,
-                         Model model, User user) {
-        // 全局参数配置 UserArgumentResolver
-        model.addAttribute("user", user);
-
-        // 取缓存
-        String html = redisService.get(GoodsKey.getGoodsList, "", String.class);
-        if (!StringUtils.isEmpty(html)) {
-            return html;
-        }
-
-        //
-        List<MiaoshaGoods> goodsList = goodsService.listGoods();
-        model.addAttribute("goodsList", goodsList);
-//        return "goods_list";
-
-        WebContext springWebContext = new WebContext(request, response,
-                request.getServletContext(),
-                request.getLocale(), model.asMap());
-        // 手动渲染
-        html = thymeleafViewResolver.getTemplateEngine().process("goods_list", springWebContext);
-        if (!StringUtils.isEmpty(html)) {
-            // 设置页面缓存 此时Redis中key: GoodsKey:gl
-            redisService.set(GoodsKey.getGoodsList, "", html);
-        }
-        return html;
+    public String list(HttpServletRequest request, HttpServletResponse response, Model model,MiaoshaUser user) {
+    	model.addAttribute("user", user);
+    	//取缓存
+    	String html = redisService.get(GoodsKey.getGoodsList, "", String.class);
+    	if(!StringUtils.isEmpty(html)) {
+    		return html;
+    	}
+    	List<GoodsVo> goodsList = goodsService.listGoodsVo();
+    	model.addAttribute("goodsList", goodsList);
+//    	 return "goods_list";
+		WebContext springWebContext = new WebContext(request, response,
+				request.getServletContext(),
+				request.getLocale(), model.asMap());
+// 手动渲染
+		html = thymeleafViewResolver.getTemplateEngine().process("goods_list", springWebContext);
+		if (!StringUtils.isEmpty(html)) {
+			// 设置页面缓存 此时Redis中key: GoodsKey:gl
+			redisService.set(GoodsKey.getGoodsList, "", html);
+		}
+    	return html;
     }
-
-
-    @RequestMapping(value = "/to_detail2/{goodsId}", produces = "text/html")
+    
+    @RequestMapping(value="/to_detail2/{goodsId}",produces="text/html")
     @ResponseBody
-    public String detail2(HttpServletRequest request,
-                         HttpServletResponse response,
-                         Model model, @PathVariable("goodsId") String goodsId, User user) {
-        model.addAttribute("user", user);
-
-        // 取缓存
-        String html = redisService.get(GoodsKey.getGoodsDetail, "" + goodsId, String.class);
-        if (!StringUtils.isEmpty(html)) {
-            return html;
-        }
-
-        MiaoshaGoods miaoshaGoods = goodsService.getMiaoshaGoodsByGoodsId(goodsId);
-        if (null == miaoshaGoods) {
-            logger.error(String.format("商品id[%s]查询商品为空。", goodsId));
-            model.addAttribute("errmsg", "查询异常...");
-            return "miaosha_fail";
-        }
-        model.addAttribute("goods", miaoshaGoods);
-
-        long nowTime = System.currentTimeMillis();
-        long startTime = miaoshaGoods.getStartDate().getTime();
-        long endTime = miaoshaGoods.getEndDate().getTime();
-
-        // 秒杀状态
-        int miaoshaStatus = 0;
-        // 倒计时
-        int remainSeconds = 0;
-
-        //活动未开始，倒计时
-        if (nowTime < startTime) {
-            remainSeconds = (int) (startTime - nowTime) / 1000;
-        } else if (nowTime > endTime) {
-            // 活动已经结束
-            miaoshaStatus = 2;
-            remainSeconds = -1;
-        } else { // 活动进行中
-            miaoshaStatus = 1;
-        }
-        model.addAttribute("miaoshaStatus", miaoshaStatus);
-        model.addAttribute("remainSeconds", remainSeconds);
+    public String detail2(HttpServletRequest request, HttpServletResponse response, Model model,MiaoshaUser user,
+    		@PathVariable("goodsId")long goodsId) {
+    	model.addAttribute("user", user);
+    	
+    	//取缓存
+    	String html = redisService.get(GoodsKey.getGoodsDetail, ""+goodsId, String.class);
+    	if(!StringUtils.isEmpty(html)) {
+    		return html;
+    	}
+    	//手动渲染
+    	GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
+    	model.addAttribute("goods", goods);
+    	
+    	long startAt = goods.getStartDate().getTime();
+    	long endAt = goods.getEndDate().getTime();
+    	long now = System.currentTimeMillis();
+    	
+    	int miaoshaStatus = 0;
+    	int remainSeconds = 0;
+    	if(now < startAt ) {//秒杀还没开始，倒计时
+    		miaoshaStatus = 0;
+    		remainSeconds = (int)((startAt - now )/1000);
+    	}else  if(now > endAt){//秒杀已经结束
+    		miaoshaStatus = 2;
+    		remainSeconds = -1;
+    	}else {//秒杀进行中
+    		miaoshaStatus = 1;
+    		remainSeconds = 0;
+    	}
+    	model.addAttribute("miaoshaStatus", miaoshaStatus);
+    	model.addAttribute("remainSeconds", remainSeconds);
 //        return "goods_detail";
 
-        //
-        WebContext webContext = new WebContext(request, response,
-                request.getServletContext(), request.getLocale(), model.asMap());
-        // 手动渲染
-        html = thymeleafViewResolver.getTemplateEngine().process("goods_detail", webContext);
-        if (!StringUtils.isEmpty(html)) {
-            // 设置页面缓存 此时Redis中key: GoodsKey:gd1 或者 GoodsKey:gd2
-            redisService.set(GoodsKey.getGoodsDetail, "" + goodsId, html);
-        }
-        return html;
-
+		WebContext springWebContext = new WebContext(request, response,
+				request.getServletContext(),
+				request.getLocale(), model.asMap());
+    	html = thymeleafViewResolver.getTemplateEngine().process("goods_detail", springWebContext);
+    	if(!StringUtils.isEmpty(html)) {
+			// 设置页面缓存 此时Redis中key: GoodsKey:gd1 或者 GoodsKey:gd2
+    		redisService.set(GoodsKey.getGoodsDetail, ""+goodsId, html);
+    	}
+    	return html;
     }
-
-
-    @RequestMapping(value = "/detail/{goodsId}" )
+    
+    @RequestMapping(value="/detail/{goodsId}")
     @ResponseBody
-    public Result<GoodsDetailVo> detail(HttpServletRequest request,
-                                        HttpServletResponse response,
-                                        User user,
-                                        Model model, @PathVariable("goodsId") String goodsId) {
-        MiaoshaGoods miaoshaGoods = goodsService.getMiaoshaGoodsByGoodsId(goodsId);
-        if (null == miaoshaGoods) {
-            logger.error(String.format("商品id[%s]查询商品为空。", goodsId));
-            model.addAttribute("errmsg", "查询异常...");
-            return Result.error(CodeMsg.SERVER_ERROR);
-        }
+    public Result<GoodsDetailVo> detail(HttpServletRequest request, HttpServletResponse response, Model model,MiaoshaUser user,
+    		@PathVariable("goodsId")long goodsId) {
+    	GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
+		if (null == goods) {
+			model.addAttribute("errmsg", "查询异常...");
+			return Result.error(CodeMsg.SERVER_ERROR);
+		}
 
-        long startTime = miaoshaGoods.getStartDate().getTime();
-        long endTime = miaoshaGoods.getEndDate().getTime();
-        long nowTime = System.currentTimeMillis();
-
-        // 秒杀状态
-        int miaoshaStatus = 0;
-        // 倒计时
-        int remainSeconds = 0;
-
-        //活动未开始
-        if (nowTime < startTime) {
-            remainSeconds = (int) (startTime - nowTime) / 1000;
-        } else if (nowTime > endTime) {
-            // 活动已经结束
-            miaoshaStatus = 2;
-            remainSeconds = -1;
-        } else { // 活动进行中
-            miaoshaStatus = 1;
-        }
-
-        GoodsDetailVo goodsDetailVo = new GoodsDetailVo();
-        goodsDetailVo.setGoods(miaoshaGoods);
-        goodsDetailVo.setUser(user);
-        goodsDetailVo.setRemainSeconds(remainSeconds);
-        goodsDetailVo.setMiaoshaStatus(miaoshaStatus);
-        return Result.sucess(goodsDetailVo);
-
+		long now = System.currentTimeMillis();
+		long startAt = goods.getStartDate().getTime();
+		long endAt = goods.getEndDate().getTime();
+		// 秒杀状态
+		int miaoshaStatus = 0;
+		// 倒计时
+		int remainSeconds = 0;
+    	if(now < startAt ) {//秒杀还没开始，倒计时
+    		miaoshaStatus = 0;
+    		remainSeconds = (int)((startAt - now )/1000);
+    	}else  if(now > endAt){//秒杀已经结束
+    		miaoshaStatus = 2;
+    		remainSeconds = -1;
+    	}else {//秒杀进行中
+    		miaoshaStatus = 1;
+    		remainSeconds = 0;
+    	}
+    	GoodsDetailVo vo = new GoodsDetailVo();
+    	vo.setGoods(goods);
+    	vo.setUser(user);
+    	vo.setRemainSeconds(remainSeconds);
+    	vo.setMiaoshaStatus(miaoshaStatus);
+    	return Result.success(vo);
     }
+    
+    
 }
