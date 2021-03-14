@@ -1,5 +1,6 @@
 package com.miaosha.vo;
 
+
 import com.miaosha.domain.OrderInfo;
 
 public class OrderDetailVo {

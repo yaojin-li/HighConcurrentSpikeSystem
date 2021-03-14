@@ -2,9 +2,9 @@ package com.miaosha.validator;
 import  javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import com.miaosha.util.ValidatorUtil;
 import org.apache.commons.lang3.StringUtils;
 
-import com.miaosha.util.ValidatorUtil;
 
 public class IsMobileValidator implements ConstraintValidator<IsMobile, String> {
 

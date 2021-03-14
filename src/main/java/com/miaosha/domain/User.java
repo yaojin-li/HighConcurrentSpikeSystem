@@ -1,7 +1,7 @@
 package com.miaosha.domain;
 
 public class User {
-		private int id;
+	private int id;
 	private String name;
 	public int getId() {
 		return id;

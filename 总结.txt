@@ -79,7 +79,7 @@ JMeter自定义变量
 
 JMeter命令行
 1.在Windows上录好jmx
-2.命令行： sh jmeter.sh -n -t XXX.jmx -| result.jtl
+2.压测指令： sh jmeter.sh -n -t XXX.jmx -l result.jtl
 3.把result.jtl导入到JMeter
 
 Redis压测
@@ -122,12 +122,14 @@ springboot 打 war 包：
 
 
 
+分布式Session
+
+分布式会话：用户登陆、共享Session
 
 
 
-
-
-
+如何优化一个秒杀项目？
+http://www.zyiz.net/tech/detail-138250.html
 
 
 

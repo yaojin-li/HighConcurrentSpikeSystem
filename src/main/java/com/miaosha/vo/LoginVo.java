@@ -2,9 +2,9 @@ package com.miaosha.vo;
 
 import javax.validation.constraints.NotNull;
 
+import com.miaosha.validator.IsMobile;
 import org.hibernate.validator.constraints.Length;
 
-import com.miaosha.validator.IsMobile;
 
 public class LoginVo {
 	
